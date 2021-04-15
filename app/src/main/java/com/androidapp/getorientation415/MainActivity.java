@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    TextView txtAzimuth, txtPitch, txtRoll;
+//    TextView txtAzimuth, txtPitch, txtRoll;
     SensorManager sensorManager;
     Sensor magSensor, accSensor;
     SensorEventListener listener;
@@ -23,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txtAzimuth = findViewById(R.id.txtAzimuth);
+/*        txtAzimuth = findViewById(R.id.txtAzimuth);
         txtPitch = findViewById(R.id.txtPitch);
-        txtRoll = findViewById(R.id.txtRoll);
+        txtRoll = findViewById(R.id.txtRoll);*/
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -57,14 +57,27 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "-180", Toast.LENGTH_SHORT);
                     }
 
-                    txtAzimuth.setText("Azimuth: " + (int) radian2Degree(values[0]));
+/*                    txtAzimuth.setText("Azimuth: " + (int) radian2Degree(values[0]));
                     txtPitch.setText("Pitch: " + (int) radian2Degree(values[1]));
-                    txtRoll.setText("Roll: " + (int) radian2Degree(values[2]));
+                    txtRoll.setText("Roll: " + (int) radian2Degree(values[2]));*/
                 }
             }
             @Override
             public void onAccuracyChanged(Sensor sensor, int accuracy) {}
         };
+        sensorManager.registerListener(listener, magSensor, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(listener, accSensor, SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(listener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         sensorManager.registerListener(listener, magSensor, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(listener, accSensor, SensorManager.SENSOR_DELAY_UI);
     }
